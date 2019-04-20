@@ -587,7 +587,7 @@ static const NSUInteger reusable_page_count = 3;
 }
 
 - (void)_handleLongPressAction:(UILongPressGestureRecognizer *)sender {
-    if (sender.state != UIGestureRecognizerStateEnded) {
+    if (sender.state != UIGestureRecognizerStateBegan) {
         return;
     }
     if (!self.pb_delegate) {
