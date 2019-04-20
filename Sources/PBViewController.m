@@ -62,6 +62,7 @@ static const NSUInteger reusable_page_count = 3;
 @property (nonatomic, assign) CGRect contentsRect;
 @property (nonatomic, assign) CGRect originFrame;
 @property (nonatomic, weak) UIView *lastThumbView;
+@property (nonatomic, strong) UIButton *moreButton;
 
 @end
 
@@ -108,6 +109,8 @@ static const NSUInteger reusable_page_count = 3;
     // Blur background
     [self _addBlurBackgroundView];
     
+    [self.view addSubview:self.moreButton];
+    
     [self.view addGestureRecognizer:self.longPressGestureRecognizer];
     [self.view addGestureRecognizer:self.doubleTapGestureRecognizer];
     [self.view addGestureRecognizer:self.singleTapGestureRecognizer];
@@ -125,7 +128,20 @@ static const NSUInteger reusable_page_count = 3;
     [self _updateIndicator];
     [self _updateBlurBackgroundView];
 }
-
+-(UIButton *)moreButton{
+    if (!_moreButton) {
+        _moreButton = [[UIButton alloc]initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50, 20, 30, 30)];
+        _moreButton.backgroundColor = [UIColor redColor];
+        [_moreButton addTarget:self action:@selector(moreButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_moreButton setImage:[UIImage imageNamed:@"more"] forState:UIControlStateNormal];
+    }
+    return _moreButton;
+}
+-(void)moreButtonClick:(UIButton *)sender{
+    if (self.MoreButtonClick) {
+        self.MoreButtonClick(sender);
+    }
+}
 #pragma mark - Public method
 
 - (void)setInitializePageIndex:(NSInteger)pageIndex {
@@ -585,9 +601,8 @@ static const NSUInteger reusable_page_count = 3;
     PBImageScrollView *imageScrollView = self.currentScrollViewController.imageScrollView;
     [imageScrollView _handleZoomForLocation:location];
 }
-
 - (void)_handleLongPressAction:(UILongPressGestureRecognizer *)sender {
-    if (sender.state != UIGestureRecognizerStateBegan) {
+    if (sender.state != UIGestureRecognizerStateEnded) {
         return;
     }
     if (!self.pb_delegate) {
@@ -667,7 +682,6 @@ static const NSUInteger reusable_page_count = 3;
     }
     return _indicatorLabel;
 }
-
 - (UIPageControl *)indicatorPageControl {
     if (!_indicatorPageControl) {
         _indicatorPageControl = [UIPageControl new];

@@ -71,7 +71,7 @@
 
 @property (nonatomic, weak, nullable) id<PBViewControllerDataSource> pb_dataSource;
 @property (nonatomic, weak, nullable) id<PBViewControllerDelegate> pb_delegate;
-
+@property (nonatomic, copy) void (^MoreButtonClick)(UIButton *btn);
 @property (nonatomic, assign) NSInteger startPage;
 @property (nonatomic, assign) NSInteger pb_startPage;
 - (void)setInitializePageIndex:(NSInteger)pageIndex __attribute__((deprecated("use `pb_startPage` instead.")));
